@@ -21,6 +21,7 @@ func Demo (Dev string) {
 		for packet := range packetSource.Packets() {
 			// Process packets here
 			fmt.Println(packet)
+			//w.WritePacket(packet.Metadata().CaptureInfo, packet.Data())
 		}
 	}
 	// Start capturing network traffic
