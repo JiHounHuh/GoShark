@@ -7,12 +7,30 @@ import (
 
  func listInterfaces() {
 	 interfaces, err := net.Interfaces()
+	 addrs, addrErr := net.InterfaceAddrs()
+
 	 if err != nil {
 		 fmt.Print(fmt.Errorf("listInterfaces: %+v\n", err.Error()))
 		 return
 	 }
+
+	 if addrErr != nil {
+		fmt.Println(fmt.Errorf("Addr: %+v\n", addrErr.Error()))
+		return
+	 }
+
 	 for index, iface := range interfaces {
-		 fmt.Println(index,": ",iface.Name)
+		 toCheck := addrs[index].String()
+
+		 if toCheck == "::1/128" { // make regex to match other subnets
+			 toCheck = "Not Connected"
+		 }
+
+		 if toCheck == "0.0.0.0/24" {
+			 toCheck = "Not Connected"
+		 }
+
+		 fmt.Println(index,": ",iface.Name, " : ", toCheck)
 	 }
  }
 
