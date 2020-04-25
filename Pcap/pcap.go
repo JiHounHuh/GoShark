@@ -14,8 +14,6 @@ func Demo (Dev string) {
 	// Open interface
 	if handle, err := pcap.OpenLive(Dev, 1600, true, 0); err != nil {
 		panic(err)
-	} else if err := handle.SetBPFFilter("tc amd prt 80"); err != nil {
-		panic(err)
 	} else { // Run if no errors
 		packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
 		for packet := range packetSource.Packets() {
