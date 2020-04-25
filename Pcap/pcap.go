@@ -2,11 +2,11 @@ package Pcap
 
 import (
 	"fmt"
-//	"os"
-//	"time"
+	"io/ioutil"
+	"strconv"
+	"os"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/pcap"
-//	"github.com/google/gopacket/layers"
 )
 
 func Demo (Dev string) {
@@ -16,9 +16,19 @@ func Demo (Dev string) {
 		panic(err)
 	} else { // Run if no errors
 		packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
+		count := 0
 		for packet := range packetSource.Packets() {
 			// Process packets here
-			fmt.Println(packet)
+			//fmt.Println(packet.Data())
+			fmt.Println("Packet =", count)
+			filename := ("Packet"+ strconv.Itoa(count)+".pcap")
+			writeErr := ioutil.WriteFile(filename, packet.Data(), 0644)
+
+			if writeErr != nil {
+				fmt.Println("There was a problem writing the file, but we have printed to the screen anyway")
+				os.Exit(1)
+			}
+			count += 1
 			//w.WritePacket(packet.Metadata().CaptureInfo, packet.Data())
 		}
 	}
