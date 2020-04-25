@@ -10,8 +10,8 @@ Basic Premise
 - alert the user of insecure connections
 
 TODO:
-- Be able to list interfaces
-- Take in user input to specifiy interface
+- ~Be able to list interfaces~
+- ~Take in user input to specifiy interface~
 - start capturing packets in background while user does stuff
 - every 5 min, send packets to GCP to be analyzed
 
