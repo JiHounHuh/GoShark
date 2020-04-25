@@ -65,12 +65,8 @@ import (
 	 fmt.Println("Available interfaces")
 	 iface, _ := net.Interfaces()
 	 listInterfaces()
-<<<<<<< HEAD
 	 input := readUserInput(len(iface))
 	 fmt.Println(input)
-=======
-	 L.Demo("eth0")
->>>>>>> 6b4deb01ccc4b05099796d8e21f34c5df301971e
 	 // list off interfaces
 	 // have user choose 1 AND/OR 2,....
 	 // then call capture.go with that interface
