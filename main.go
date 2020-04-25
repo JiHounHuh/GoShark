@@ -8,36 +8,31 @@ import (
 	"os"
 	"strconv"
 	"strings"
- )
+)
 
- func listInterfaces() {
-	 interfaces, err := net.Interfaces()
-	 addrs, addrErr := net.InterfaceAddrs()
+func listInterfaces() []string {
+	interfaces, err := net.Interfaces()
+	var ifaceArr []string
 
-	 if err != nil {
-		 fmt.Print(fmt.Errorf("listInterfaces: %+v\n", err.Error()))
-		 return
+	if err != nil {
+		fmt.Print(fmt.Errorf("listInterfaces: %+v\n", err.Error()))
+		os.Exit(1)
+	}
+
+	for _, iface := range interfaces {
+		arr,_ := iface.Addrs()
+		if len(arr) == 0{
+			continue
+		}
+		ifaceArr = append(ifaceArr, iface.Name)
 	 }
 
-	 if addrErr != nil {
-		fmt.Println(fmt.Errorf("Addr: %+v\n", addrErr.Error()))
-		return
-	 }
+	for index, iface := range ifaceArr {
+		fmt.Println(index,": ",iface)
+	}
 
-	 for index, iface := range interfaces {
-		 toCheck := addrs[index].String()
-
-		 if toCheck == "::1/128" { // make regex to match other subnets
-			 toCheck = "Not Connected"
-		 }
-
-		 if toCheck == "0.0.0.0/24" {
-			 toCheck = "Not Connected"
-		 }
-
-		 fmt.Println(index,": ",iface.Name, " : ", toCheck)
-	 }
- }
+	return ifaceArr
+}
 
  func readUserInput(size int) int {
 	 //size := len(net.Interfaces())
@@ -54,11 +49,11 @@ import (
 			 fmt.Println("Cannot convert input to int")
 			 os.Exit(1)
 		 }
-		 
+
 		 if index >= 0 && index < size {
 			 return index
 		}
-		
+
 		if count == 2 {
 			fmt.Println("Invalid choices made. Shutting down...")
 			os.Exit(1)
@@ -69,13 +64,14 @@ import (
  }
 
  func main() {
+	 var iface []string
 	 fmt.Println("|:|:|:|:|:| GoShark |:|:|:|:|:|")
-	 fmt.Println("Available interfaces")
-	 iface, _ := net.Interfaces()
-	 listInterfaces()
+	 fmt.Println("Available connected interfaces")
+
+	 iface = listInterfaces()
 	 input := readUserInput(len(iface))
 	 fmt.Println(input)
-	 L.Demo(iface[input].Name)
+	 L.Demo(iface[input])
 	 // list off interfaces
 	 // have user choose 1 AND/OR 2,....
 	 // then call capture.go with that interface
