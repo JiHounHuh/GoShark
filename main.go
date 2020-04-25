@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"net"
+	"bufio"
+	"os"
+	"strconv"
  )
 
  func listInterfaces() {
@@ -34,10 +37,35 @@ import (
 	 }
  }
 
+ func readUserInput(size int) int {
+	 //size := len(net.Interfaces())
+	 reader := bufio.NewReader(os.Stdin)
+	 count := 0
+
+	 for {
+		 fmt.Print("Enter index of the device: ")
+  	 indexStr, _ := reader.ReadString('\n')
+  	 index, _ := strconv.Atoi(indexStr)
+
+  	 if index > 0 && index < size {
+  		 return index
+  	 }
+		 if count == 2 {
+			 fmt.Println("Invalid choices made. Shutting down...")
+			 os.Exit(1)
+		 }
+
+		 fmt.Println("Invalid choice. (0-",size-1,")")
+	 }
+ }
+
  func main() {
 	 fmt.Println("|:|:|:|:|:| GoShark |:|:|:|:|:|")
 	 fmt.Println("Available interfaces")
+	 iface, _ := net.Interfaces()
 	 listInterfaces()
+	 input := readUserInput(len(iface))
+	 fmt.Println(input)
 	 // list off interfaces
 	 // have user choose 1 AND/OR 2,....
 	 // then call capture.go with that interface
