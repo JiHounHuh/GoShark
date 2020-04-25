@@ -1,13 +1,13 @@
 package Pcap
 
-import {
+import (
 	"fmt"
 	"github.com/google/gopacket"
-	"github.com/google/gopacket/pcap"
 	"github.com/google/gopacket/pcapgo"
 	"github.com/google/gopacket/layers"
-}
+)
 
-func Demo () {
-	fmt.Println("Hello")
+
+func Demo (Dev string) {
+	fmt.Printf("%s\n",Dev)
 }
