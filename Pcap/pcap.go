@@ -9,7 +9,7 @@ import (
 	"github.com/google/gopacket/pcap"
 )
 
-func Demo (Dev string) {
+func Capture (Dev string) {
 	fmt.Printf("%s\n",Dev)
 	// Open interface
 	if handle, err := pcap.OpenLive(Dev, 1600, true, 0); err != nil {
