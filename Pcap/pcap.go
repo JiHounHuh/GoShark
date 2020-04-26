@@ -1,43 +1,17 @@
 package Pcap
 
 import (
+	A "../Latex"
 	"fmt"
 	"strings"
-	//"time"
-	//"strconv"
 	"os"
-	"os/exec"
-	"io/ioutil"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/pcap"
 )
 
-func sendToGCP(filename string) {
-	scp := "/usr/bin/scp"
-	user := "citrus"
-
-	// read server IP from file, so this way
-	// our IP of our GCP computer engine isnt on github
-	ip, readErr := ioutil.ReadFile("secretIP")
-
-	if readErr != nil {
-		fmt.Println("Error reading secret IP from file", readErr)
-		os.Exit(1)
-	}
-
-	dst := string(ip)+":~/pcaps/" // replace with your IP of analyzing server
-	// scp PacketX user@<IP>:~/pcaps/
-	cmd := exec.Command(scp, filename, (user+"@"+dst))
-	sendErr := cmd.Run()
-
-	if sendErr != nil {
-		fmt.Println("Cannot send to GCP", sendErr)
-		os.Exit(1)
-	}
-}
-
 func Capture (Dev string) {
 	flag := 0
+	count := 0
 	keywords := []string{"admin","Admin","Set-Cookie","cookie","Cookie","user","User","Pass","pass","password","passwd","Password","Passwd","key","Key","username","Username"}
 	// Open interface
 	if handle, err := pcap.OpenLive(Dev, 1600, true, 0); err != nil {
@@ -57,6 +31,7 @@ func Capture (Dev string) {
 		fmt.Println(filename,"created.")
 
 		defer file.Close()
+		defer A.MakeReport()
 
 		//start := time.Now()
 		//fmt.Println("start time",start)
@@ -130,8 +105,6 @@ func Capture (Dev string) {
 			if srcPort[1] == "80(http)" || dstPort[1] == "80(http)" {
 				payload := string(packet.ApplicationLayer().Payload())
 				outputToFile := ""
-				fmt.Println("srcIP:",srcIP[1],"\ndstIP:",dstIP[1],"\nsrcPort:",srcPort[1],"\ndstPort:",dstPort[1])
-				fmt.Println("\n",payload,"\n")
 
 				payloadArr := strings.Split(payload,"\n")
 
@@ -156,8 +129,6 @@ func Capture (Dev string) {
 			}
 
 			if (srcPort[1] == "20(ftp)" && dstPort[1] == "20(ftp)") || (srcPort[1] == "21(ftp)" && dstPort[1] == "21(ftp)") {
-				fmt.Println("srcIP:",srcIP[1],"\ndstIP:",dstIP[1],"\nsrcPort:",srcPort[1],"\ndstPort:",dstPort[1])
-				fmt.Println("\n",string(packet.ApplicationLayer().Payload()),"\n")
 				line := srcIP[1]+"~"+dstIP[1]+"~"+srcPort[1]+"~"+dstPort[1]+"~"+string(packet.ApplicationLayer().Payload())+"~\n"
 				_, err := file.WriteString(line)
 				if err != nil {
@@ -167,8 +138,6 @@ func Capture (Dev string) {
 			}
 
 			if (srcPort[1] == "22(ssh)" && dstPort[1] == "22(ssh)") || (srcPort[1] == "23(telnet)" && dstPort[1] == "23(telnet)") {
-				fmt.Println("srcIP:",srcIP[1],"\ndstIP:",dstIP[1],"\nsrcPort:",srcPort[1],"\ndstPort:",dstPort[1])
-				fmt.Println("\n",string(packet.ApplicationLayer().Payload()),"\n")
 				line := srcIP[1]+"~"+dstIP[1]+"~"+srcPort[1]+"~"+dstPort[1]+"~"+string(packet.ApplicationLayer().Payload())+"~\n"
 				_, err := file.WriteString(line)
 				if err != nil {
@@ -176,19 +145,12 @@ func Capture (Dev string) {
 					os.Exit(1)
 				}
 			}
-			/*
-			_, err := file.WriteString("\n\nstart\n\n")
-			_, err = file.WriteString(packet.Dump())
-			_, err = file.WriteString("\n\nend\n\n")
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
+			count += 1
+			if count >= 4999 {
+				break
 			}
-			*/
-			//go sendToGCP(filename)
-			//w.WritePacket(packet.Metadata().CaptureInfo, packet.Data())
 		}
 	}
-	// Start capturing network traffic
-	//
+	A.MakeReport()
+	return
 }

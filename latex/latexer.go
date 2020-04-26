@@ -1,4 +1,4 @@
-package main
+package Latex
 
 import (
 	"fmt"
@@ -8,8 +8,8 @@ import (
 	"strings"
 )
 //\usepackage{fullpage,latexsym,picinpar,amsmath,amsfonts}
-func main() {
-	content := 
+func MakeReport() {
+	content :=
 `
 \documentclass{article}
 \usepackage{fullpage,latexsym,picinpar,amsmath,amsfonts}
@@ -20,13 +20,13 @@ func main() {
 \begin{document}
 \begin{center}
 	\includegraphics[scale=0.25]{Cyber_525x438.png}\\
-\end{center}	
+\end{center}
 \centerline{\large \bf REPORT}
 \begin{center}
 During our packet capture, we found the following details that might be insecure\\
- \begin{tabular}{||c c c c c||} 
- \hline 
- SrcIP & DstIP & SrcPort & DstPort & Finding \\ [0.5ex] 
+ \begin{tabular}{||c c c c c||}
+ \hline
+ SrcIP & DstIP & SrcPort & DstPort & Finding \\ [0.5ex]
  \hline\hline
 `
 	end :=
@@ -71,7 +71,7 @@ During our packet capture, we found the following details that might be insecure
 
 		if i % ((5 * rowCount) - 1) == 0 && i != 0 {
 			fmt.Println("GOT ALL 4")
-			content += strings.Replace(lineToAdd[0:len(lineToAdd)-3],"_","\\_",-1) 
+			content += strings.Replace(lineToAdd[0:len(lineToAdd)-3],"_","\\_",-1)
 			content += "}\\\\\n\\hline\n"
 			lineToAdd = ""
 			rowCount += 1

@@ -1,0 +1,71 @@
+
+\documentclass{article}
+\usepackage{fullpage,latexsym,picinpar,amsmath,amsfonts}
+\usepackage{graphicx}
+\usepackage{array}
+\newcolumntype{L}{>{\centering\arraybackslash}m{3cm}}
+\usepackage{tabularx}
+\begin{document}
+\begin{center}
+	\includegraphics[scale=0.25]{Cyber_525x438.png}\\
+\end{center}
+\centerline{\large \bf REPORT}
+\begin{center}
+During our packet capture, we found the following details that might be insecure\\
+ \begin{tabular}{||c c c c c||}
+ \hline
+ SrcIP & DstIP & SrcPort & DstPort & Finding \\ [0.5ex]
+ \hline\hline
+192.168.1.92 & 107.170.40.77 & 53179 & 80(http) & \multicolumn{1}{m{3cm}|}{User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:75.0) Gecko/20100101 Firefox/75.0}\\
+\hline
+107.170.40.77 & 192.168.1.92 & 80(http) & 53179 & \multicolumn{1}{m{3cm}|}{A possible vulnerability exists}\\
+\hline
+107.170.40.77 & 192.168.1.92 & 80(http) & 53179 & \multicolumn{1}{m{3cm}|}{A possible vulnerability exists}\\
+\hline
+192.168.1.92 & 107.170.40.77 & 53179 & 80(http) & \multicolumn{1}{m{3cm}|}{User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:75.0) Gecko/20100101 Firefox/75.0}\\
+\hline
+107.170.40.77 & 192.168.1.92 & 80(http) & 53179 & \multicolumn{1}{m{3cm}|}{A possible vulnerability exists}\\
+\hline
+192.168.1.92 & 107.170.40.77 & 53189 & 80(http) & \multicolumn{1}{m{3cm}|}{User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:75.0) Gecko/20100101 Firefox/75.}\\
+\hline
+107.170.40.77 & 192.168.1.92 & 80(http) & 53189 & \multicolumn{1}{m{3cm}|}{A possible vulnerability exists.}\\
+\hline
+107.170.40.77 & 192.168.1.92 & 80(http) & 53189 & \multicolumn{1}{m{3cm}|}{A possible vulnerability exists.}\\
+\hline
+192.168.1.92 & 107.170.40.77 & 53189 & 80(http) & \multicolumn{1}{m{3cm}|}{User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:75.0) Gecko/20100101 Firefox/75.}\\
+\hline
+107.170.40.77 & 192.168.1.92 & 80(http) & 53189 & \multicolumn{1}{m{3cm}|}{A possible vulnerability exists.}\\
+\hline
+192.168.1.92 & 107.170.40.77 & 53192 & 80(http) & \multicolumn{1}{m{3cm}|}{User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:75.0) Gecko/20100101 Firefox/75.}\\
+\hline
+107.170.40.77 & 192.168.1.92 & 80(http) & 53192 & \multicolumn{1}{m{3cm}|}{A possible vulnerability exists.}\\
+\hline
+107.170.40.77 & 192.168.1.92 & 80(http) & 53192 & \multicolumn{1}{m{3cm}|}{A possible vulnerability exists.}\\
+\hline
+192.168.1.92 & 107.170.40.77 & 53192 & 80(http) & \multicolumn{1}{m{3cm}|}{User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:75.0) Gecko/20100101 Firefox/75.}\\
+\hline
+107.170.40.77 & 192.168.1.92 & 80(http) & 53192 & \multicolumn{1}{m{3cm}|}{A possible vulnerability exists.}\\
+\hline
+192.168.1.92 & 107.170.40.77 & 53193 & 80(http) & \multicolumn{1}{m{3cm}|}{User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:75.0) Gecko/20100101 Firefox/75.}\\
+\hline
+107.170.40.77 & 192.168.1.92 & 80(http) & 53193 & \multicolumn{1}{m{3cm}|}{A possible vulnerability exists.}\\
+\hline
+107.170.40.77 & 192.168.1.92 & 80(http) & 53193 & \multicolumn{1}{m{3cm}|}{A possible vulnerability exists.}\\
+\hline
+192.168.1.92 & 107.170.40.77 & 53193 & 80(http) & \multicolumn{1}{m{3cm}|}{User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:75.0) Gecko/20100101 Firefox/75.}\\
+\hline
+107.170.40.77 & 192.168.1.92 & 80(http) & 53193 & \multicolumn{1}{m{3cm}|}{A possible vulnerability exists.}\\
+\hline
+192.168.1.92 & 107.170.40.77 & 53360 & 80(http) & \multicolumn{1}{m{3cm}|}{User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:75.0) Gecko/20100101 Firefox/75.}\\
+\hline
+107.170.40.77 & 192.168.1.92 & 80(http) & 53360 & \multicolumn{1}{m{3cm}|}{Plaintext data recoverable.}\\
+\hline
+107.170.40.77 & 192.168.1.92 & 80(http) & 53360 & \multicolumn{1}{m{3cm}|}{Plaintext data recoverable.}\\
+\hline
+192.168.1.92 & 107.170.40.77 & 53360 & 80(http) & \multicolumn{1}{m{3cm}|}{User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:75.0) Gecko/20100101 Firefox/75.}\\
+\hline
+107.170.40.77 & 192.168.1.92 & 80(http) & 53360 & \multicolumn{1}{m{3cm}|}{Plaintext data recoverable.}\\
+\hline
+\end{tabular}
+\end{center}
+\end{document}
