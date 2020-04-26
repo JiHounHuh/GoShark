@@ -2,7 +2,7 @@ main
 secretIP
 packet*
 toRead.txt
-latex/toRead.txt
-latex/report*
-
+Latex/toRead.txt
+Latex/report*
 latexer
+report*
