@@ -109,7 +109,7 @@ func Capture (Dev string) {
 			dstIP := strings.Split(layer2[13],"=")
 			srcPort := strings.Split(layer3[2],"=")
 			dstPort := strings.Split(layer3[3],"=")
-
+/*
 			fmt.Println("\nsrcIP = ",srcIP[1])
 			fmt.Println("dstIP = ",dstIP[1])
 
@@ -120,8 +120,8 @@ func Capture (Dev string) {
 			if dstPort[0] == "DstPort" {
 				fmt.Println("DstPort = ",dstPort[1])
 			}
-
-			if dstIP[1] == "104.24.118.24" {
+*/
+			if srcPort[1] == "80(http)" || dstPort[1] == "80(http)" {
 				fmt.Println("srcIP:",srcIP[1],"\ndstIP:",dstIP[1],"\nsrcPort:",srcPort[1],"\ndstPort:",dstPort[1])
 				fmt.Println("\n",string(packet.ApplicationLayer().Payload()),"\n")
 			}
