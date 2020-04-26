@@ -77,14 +77,17 @@ func Capture (Dev string) {
 				start = time.Now()
 				elapsed = 0
 			}
+			fmt.Println(packet.Dump())
 
-			_, err := file.Write(packet.Data())
+			_, err := file.WriteString("\n\nstart\n\n")
+			_, err = file.Write(packet.Data())
+			_, err = file.WriteString("\n\nend\n\n")
 			if err != nil {
 				fmt.Println(err)
 				os.Exit(1)
 			}
 
-			go sendToGCP(filename)
+			//go sendToGCP(filename)
 			//w.WritePacket(packet.Metadata().CaptureInfo, packet.Data())
 		}
 	}
