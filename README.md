@@ -1,6 +1,9 @@
 # GoShark
 A wireshark CLI written in go!
 
+CURRENTLY MUST BE RUN AS ROOT
+this is because libpcap is protected at the kernel level and to avoid permissions mishaps, you msut be root to capture packets
+
 Basic Premise
 - CLI
 - specifiy an interface
