@@ -1,4 +1,7 @@
 main
 secretIP
 packet*
-toRead
+toRead*
+latex/toRead
+latex/report*
+
