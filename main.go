@@ -64,8 +64,10 @@ func listInterfaces() []string {
  }
 
  func main() {
+	 // http://www.ascii-art.de/ascii/s/sharks.txt
+	 shark := "                     ^`.                     o\n     ^_              \\  \\                  o  o\n     \\ \\             {   \\                 o\n     {  \\           /     `~~~--__\n     {   \\___----~~'              `~~-_     ______          _____\n      \\                         /// a  `~._(_||___)________/___\n      / /~~~~-, ,__.    ,      ///  __,,,,)      o  ______/    \\ \n      \\/      \\/    `~~~;   ,---~~-_`~= \\ \\------o-'            \\ \n                       /   /            / /\n                      '._.'           _/_/\n                                      ';|\\ \n            -David 'TAZ' Baltazar-	 \n"
 	 var iface []string
-	 fmt.Println("|:|:|:|:|:| GoShark |:|:|:|:|:|")
+	 fmt.Println(shark,"\n|:|:|:|:|:| GoShark |:|:|:|:|:|")
 	 fmt.Println("Available connected interfaces")
 
 	 iface = listInterfaces()
