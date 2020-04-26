@@ -2,7 +2,7 @@ package Pcap
 
 import (
 	"fmt"
-	"io/ioutil"
+	"time"
 	"strconv"
 	"os"
 	"github.com/google/gopacket"
@@ -17,18 +17,46 @@ func Capture (Dev string) {
 	} else { // Run if no errors
 		packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
 		count := 0
+
+		filename := "packets"+strconv.Itoa(count)+".pcap"
+		file, err := os.OpenFile(filename, os.O_CREATE | os.O_APPEND | os.O_WRONLY, 0660)
+
+		if err != nil{
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		fmt.Println(filename,"created.")
+
+		defer file.Close()
+
+		start := time.Now()
+		fmt.Println("start time",start)
 		for packet := range packetSource.Packets() {
 			// Process packets here
-			//fmt.Println(packet.Data())
-			fmt.Println("Packet =", count)
-			filename := ("Packet"+ strconv.Itoa(count)+".pcap")
-			writeErr := ioutil.WriteFile(filename, packet.Data(), 0644)
+			end := time.Now()
+			elapsed := end.Sub(start)
 
-			if writeErr != nil {
-				fmt.Println("There was a problem writing the file, but we have printed to the screen anyway")
+			if elapsed >= 30000000000{
+				count += 1
+				file.Close()
+				filename = "packets"+strconv.Itoa(count)+".pcap"
+				file, err = os.OpenFile(filename, os.O_CREATE | os.O_APPEND | os.O_WRONLY, 0660)
+
+				if err != nil{
+					fmt.Println(err)
+					os.Exit(1)
+				}
+				fmt.Println("created new pcap file:",filename)
+				start = time.Now()
+				elapsed = 0
+			}
+
+			_, err := file.Write(packet.Data())
+			if err != nil {
+				fmt.Println(err)
 				os.Exit(1)
 			}
-			count += 1
+			//w.WritePacket(packet.Metadata().CaptureInfo, packet.Data())
 		}
 	}
 	// Start capturing network traffic
