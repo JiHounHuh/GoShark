@@ -5,9 +5,24 @@ import (
 	"time"
 	"strconv"
 	"os"
+	"os/exec"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/pcap"
 )
+
+func sendToGCP(filename string) {
+	scp := "/usr/bin/scp"
+	user := "citrus"
+	dst := "<IP>:~/pcaps/" // replace with your IP of analyzing server
+	// scp PacketX root@<IP>:~/pcaps/
+	cmd := exec.Command(scp, filename, (user+"@"+dst))
+	sendErr := cmd.Run()
+
+	if sendErr != nil {
+		fmt.Println("Cannot send to GCP", sendErr)
+		os.Exit(1)
+	}
+}
 
 func Capture (Dev string) {
 	fmt.Printf("%s\n",Dev)
@@ -36,7 +51,8 @@ func Capture (Dev string) {
 			end := time.Now()
 			elapsed := end.Sub(start)
 
-			if elapsed >= 30000000000{
+			// time in nanoseconds
+			if elapsed >= 30000000000 {
 				count += 1
 				file.Close()
 				filename = "packets"+strconv.Itoa(count)+".pcap"
@@ -56,6 +72,8 @@ func Capture (Dev string) {
 				fmt.Println(err)
 				os.Exit(1)
 			}
+
+			go sendToGCP(filename)
 			//w.WritePacket(packet.Metadata().CaptureInfo, packet.Data())
 		}
 	}
