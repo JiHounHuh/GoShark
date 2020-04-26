@@ -126,7 +126,7 @@ func Capture (Dev string) {
 				fmt.Println("DstPort = ",dstPort[1])
 			}
 */
-			if srcPort[1] || dstPort[1] == "80(http)" {
+			if srcPort[1] == "80(http)" || dstPort[1] == "80(http)" {
 				fmt.Println("srcIP:",srcIP[1],"\ndstIP:",dstIP[1],"\nsrcPort:",srcPort[1],"\ndstPort:",dstPort[1])
 				fmt.Println("\n",string(packet.ApplicationLayer().Payload()),"\n")
 				line := srcIP[1]+"~"+dstIP[1]+"~"+srcPort[1]+"~"+dstPort[1]+"~"+string(packet.ApplicationLayer().Payload())+"\n"
