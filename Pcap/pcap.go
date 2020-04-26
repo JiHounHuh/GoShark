@@ -138,7 +138,7 @@ func Capture (Dev string) {
 				for _,v1 := range payloadArr {
 					for _,v2 := range keywords {
 						if strings.Contains(v1,v2) {
-							outputToFile += v1+"\n"
+							outputToFile += v1[0:len(v1)-2]+"\n"
 						}
 					}
 				}
@@ -147,7 +147,6 @@ func Capture (Dev string) {
 					outputToFile = "A possible vulnerability exists.\n"
 				}
 
-				outputToFile = outputToFile[0:len(outputToFile)-2]
 				line := srcIP[1]+"~"+dstIP[1]+"~"+srcPort[1]+"~"+dstPort[1]+"~"+outputToFile+"\n"
 				_, err := file.WriteString(line)
 				if err != nil {
