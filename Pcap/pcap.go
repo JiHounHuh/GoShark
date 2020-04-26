@@ -131,13 +131,9 @@ func Capture (Dev string) {
 				payload := string(packet.ApplicationLayer().Payload())
 				outputToFile := ""
 				fmt.Println("srcIP:",srcIP[1],"\ndstIP:",dstIP[1],"\nsrcPort:",srcPort[1],"\ndstPort:",dstPort[1])
-				fmt.Println("\n",payload)
+				fmt.Println("\n",payload,"\n")
 
-				f := func(c rune) bool {
-					return c == '\n'
-				}
-
-				payloadArr := strings.FieldsFunc(payload,f)
+				payloadArr := strings.Split(payload,"\n")
 
 				for _,v1 := range payloadArr {
 					for _,v2 := range keywords {
@@ -147,25 +143,11 @@ func Capture (Dev string) {
 					}
 				}
 
-				/*result := func(s string) bool {
-					for _, r := range s {
-						if r < 32 || r > 126 {
-							return false
-						}
-					}
-					return true
-				}*/
-
 				if outputToFile == "" {
-					for i,v := range payloadArr {
-						if v == "\x0A\x0D" {
-							break
-						} else {
-							outputToFile += payloadArr[i]
-						}
-					}
+					outputToFile = "A possible vulnerability exists.\n"
 				}
 
+				outputToFile = outputToFile[0:len(outputToFile)-2]
 				line := srcIP[1]+"~"+dstIP[1]+"~"+srcPort[1]+"~"+dstPort[1]+"~"+outputToFile+"\n"
 				_, err := file.WriteString(line)
 				if err != nil {
