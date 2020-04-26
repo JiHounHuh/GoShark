@@ -9,14 +9,14 @@ Basic Premise
 - CLI
 - specifiy an interface
 - capture packets
-- Send them to a MongoDB on GCP
+- Send them to ~a MongoDB on~ GCP
 - analyze the packets for insecurities
 - alert the user of insecure connections
 
 TODO:
 - ~Be able to list interfaces~
 - ~Take in user input to specifiy interface~
-- start capturing packets in background while user does stuff
+- ~start capturing packets in background while user does stuff~
 - every 5 min, send packets to GCP to be analyzed
 
 ON GCP
