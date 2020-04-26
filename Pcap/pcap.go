@@ -2,6 +2,7 @@ package Pcap
 
 import (
 	"fmt"
+	"strings"
 	"time"
 	"strconv"
 	"os"
@@ -77,10 +78,49 @@ func Capture (Dev string) {
 				start = time.Now()
 				elapsed = 0
 			}
-			fmt.Println(packet.Dump())
+			//fmt.Println(packet.Dump())
+
+			layers := packet.Layers()
+
+			if len(layers) < 3 {
+				fmt.Println("\nLESS THAN THREE")
+				continue
+			}
+
+			layer2 := strings.Split(gopacket.LayerDump(layers[1]), " ")
+			layer3 := strings.Split(gopacket.LayerDump(layers[2]), " ")
+
+			if strings.Split(layer2[2],"=")[1] == "6" {
+				//f*** you ipv6
+				continue
+			}
+
+			if layer3[2] == "0" {
+				continue
+			}
+			if layer3[3] == "0" {
+				continue
+			}
+
+			srcIP := strings.Split(layer2[12],"=")
+			dstIP := strings.Split(layer2[13],"=")
+			srcPort := strings.Split(layer3[2],"=")
+			dstPort := strings.Split(layer3[3],"=")
+
+			fmt.Println("\nsrcIP = ",srcIP[1])
+			fmt.Println("dstIP = ",dstIP[1])
+
+			if srcPort[0] == "SrcPort" {
+				fmt.Println("SrcPort = ",srcPort[1])
+			}
+
+			if dstPort[0] == "DstPort" {
+				fmt.Println("DstPort = ",dstPort[1])
+			}
+
 
 			_, err := file.WriteString("\n\nstart\n\n")
-			_, err = file.Write(packet.Data())
+			_, err = file.WriteString(packet.Dump())
 			_, err = file.WriteString("\n\nend\n\n")
 			if err != nil {
 				fmt.Println(err)
