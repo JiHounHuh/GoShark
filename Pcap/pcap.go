@@ -126,6 +126,17 @@ func Capture (Dev string) {
 				fmt.Println("\n",string(packet.ApplicationLayer().Payload()),"\n")
 			}
 
+			if (srcPort[1] == "20(ftp)" && dstPort[1] == "20(ftp)") || (srcPort[1] == "21(ftp)" && dstPort[1] == "21(ftp)") {
+				fmt.Println("srcIP:",srcIP[1],"\ndstIP:",dstIP[1],"\nsrcPort:",srcPort[1],"\ndstPort:",dstPort[1])
+				fmt.Println("\n",string(packet.ApplicationLayer().Payload()),"\n")
+			}
+
+			if (srcPort[1] == "22(ssh)" && dstPort[1] == "22(ssh)") || (srcPort[1] == "23(telnet)" && dstPort[1] == "23(telnet)") {
+				fmt.Println("srcIP:",srcIP[1],"\ndstIP:",dstIP[1],"\nsrcPort:",srcPort[1],"\ndstPort:",dstPort[1])
+				fmt.Println("\n",string(packet.ApplicationLayer().Payload()),"\n")
+			}
+
+
 
 			_, err := file.WriteString("\n\nstart\n\n")
 			_, err = file.WriteString(packet.Dump())
