@@ -14,6 +14,8 @@ func main() {
 \documentclass{article}
 \usepackage{fullpage,latexsym,picinpar,amsmath,amsfonts}
 \usepackage{graphicx}
+\usepackage{array}
+\newcolumntype{L}{>{\centering\arraybackslash}m{3cm}}
 \usepackage{tabularx}
 \begin{document}
 \begin{center}
@@ -54,14 +56,18 @@ During our packet capture, we found the following details that might be insecure
 */
 
 	// for loop to search file to add to latex
-	toRead, readErr := ioutil.ReadFile("toRead")
+	toRead, readErr := ioutil.ReadFile("toRead.txt")
 
 	if readErr != nil {
 		fmt.Println("Error reading insecure packets from file", readErr)
 		os.Exit(1)
 	}
 
-	splits := strings.Fields(string(toRead))
+	f := func(c rune) bool {
+		return c == '~'
+	}
+
+	splits := strings.FieldsFunc(string(toRead),f)
 
 	var lineToAdd string = ""
 	for i, c := range splits {
@@ -72,15 +78,24 @@ During our packet capture, we found the following details that might be insecure
 
 		toC := i+1
 
+		for in := 1; in < 100; in++ {
+			if toC % (4+(5*in)) == 0 {
+				lineToAdd += "\\multicolumn{1}{m{3cm}|}{"
+			}
+		}
+
+		if toC == 4 {
+			lineToAdd += "\\multicolumn{1}{m{3cm}|}{"
+		}
+
 		if toC % 5 == 0  {
 			fmt.Println("GOT ALL 4")
 			content += lineToAdd[0:len(lineToAdd)-3] 
-			content += " \\\\\n\\hline\n"
+			content += "}\\\\\n\\hline\n"
 			lineToAdd = ""
 		}
 	}
 	content = content[0:len(content)-1]
-
 
 	content += end
 
