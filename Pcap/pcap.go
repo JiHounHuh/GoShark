@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"os"
 	"os/exec"
+	"io/ioutil"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/pcap"
 )
@@ -13,8 +14,18 @@ import (
 func sendToGCP(filename string) {
 	scp := "/usr/bin/scp"
 	user := "citrus"
-	dst := "<IP>:~/pcaps/" // replace with your IP of analyzing server
-	// scp PacketX root@<IP>:~/pcaps/
+
+	// read server IP from file, so this way
+	// our IP of our GCP computer engine isnt on github
+	ip, readErr := ioutil.ReadFile("secretIP")
+
+	if readErr != nil {
+		fmt.Println("Error reading secret IP from file", readErr)
+		os.Exit(1)
+	}
+
+	dst := string(ip)+":~/pcaps/" // replace with your IP of analyzing server
+	// scp PacketX user@<IP>:~/pcaps/
 	cmd := exec.Command(scp, filename, (user+"@"+dst))
 	sendErr := cmd.Run()
 
