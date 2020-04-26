@@ -17,12 +17,12 @@ TODO:
 - ~Be able to list interfaces~
 - ~Take in user input to specifiy interface~
 - ~start capturing packets in background while user does stuff~
-- every 5 min, send packets to GCP to be analyzed
+- ~every 5 min, send packets to GCP to be analyzed~ Scraped this idea
 
-ON GCP
-- receive packets
-- use REGEX to find insecure connections, and filter those out immediately (ie, unsecured telnet, flag)
-- write alerts to latex documents (then compile)
-- SCP file to host
+~ON GCP~
+- ~receive packets~
+- ~use REGEX to find insecure connections, and filter those out immediately (ie, unsecured telnet, flag)~
+- ~write alerts to latex documents (then compile)~
+- ~SCP file to host~
 
 - Host then has pdf with alerts
