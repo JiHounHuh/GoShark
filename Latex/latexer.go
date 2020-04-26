@@ -15,6 +15,7 @@ func MakeReport() {
 \usepackage{fullpage,latexsym,picinpar,amsmath,amsfonts}
 \usepackage{graphicx}
 \usepackage{array}
+\usepackage{longtable}
 \newcolumntype{L}{>{\centering\arraybackslash}m{3cm}}
 \usepackage{tabularx}
 \begin{document}
@@ -24,14 +25,15 @@ func MakeReport() {
 \centerline{\large \bf REPORT}
 \begin{center}
 During our packet capture, we found the following details that might be insecure\\
- \begin{tabular}{||c c c c c||}
+\newpage
+ \begin{longtable}{||c c c c c||}
  \hline
  SrcIP & DstIP & SrcPort & DstPort & Finding \\ [0.5ex]
  \hline\hline
 `
 	end :=
 `
-\end{tabular}
+\end{longtable}
 \end{center}
 \end{document}
 `
@@ -64,7 +66,7 @@ During our packet capture, we found the following details that might be insecure
 		lineToAdd += " & "
 
 		if i % ((5*rowCount)-2) == 0 && i != 0 {
-			lineToAdd += "\\multicolumn{1}{m{3cm}|}{"
+			lineToAdd += "\\multicolumn{1}{m{8.5cm}|}{"
 		}
 
 		if i % ((5 * rowCount) - 1) == 0 && i != 0 {
