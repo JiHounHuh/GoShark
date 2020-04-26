@@ -35,26 +35,6 @@ During our packet capture, we found the following details that might be insecure
 \end{center}
 \end{document}
 `
-/*
-\begin{center}
- \begin{tabular}{||c c c c||} 
- \hline
- SrcIP & SrcPort & DstIP & DstPort \\ [0.5ex] 
- \hline\hline
- 1 & 6 & 87837 & 787 \\ 
- \hline
- 2 & 7 & 78 & 5415 \\
- \hline
- 3 & 545 & 778 & 7507 \\
- \hline
- 4 & 545 & 18744 & 7560 \\
- \hline
- 5 & 88 & 788 & 6344 \\ [1ex] 
- \hline
-\end{tabular}
-\end{center}
-*/
-
 	// for loop to search file to add to latex
 	toRead, readErr := ioutil.ReadFile("toRead.txt")
 
@@ -72,13 +52,21 @@ During our packet capture, we found the following details that might be insecure
 	var lineToAdd string = ""
 	for i, c := range splits {
 		fmt.Println("i",i)
-		lineToAdd += c // dstIP, srcIP, srcPort, dstPort
+		if len(c) == 1 {
+			if int(c[0]) < 32 {
+				continue
+			} else {
+				lineToAdd += c
+			}
+		} else {
+			lineToAdd += c
+		}
 		lineToAdd += " & "
 		fmt.Println("linesToAdd",lineToAdd)
 
 		toC := i+1
 
-		for in := 1; in < 100; in++ {
+		for in := 1; in < 1000; in++ {
 			if toC % (4+(5*in)) == 0 {
 				lineToAdd += "\\multicolumn{1}{m{3cm}|}{"
 			}

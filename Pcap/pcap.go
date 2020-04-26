@@ -131,24 +131,38 @@ func Capture (Dev string) {
 				payload := string(packet.ApplicationLayer().Payload())
 				outputToFile := ""
 				fmt.Println("srcIP:",srcIP[1],"\ndstIP:",dstIP[1],"\nsrcPort:",srcPort[1],"\ndstPort:",dstPort[1])
-				fmt.Println("\n",payload,"\n")
+				fmt.Println("\n",payload)
 
-				payloadArr := strings.Split(payload,"\n")
+				f := func(c rune) bool {
+					return c == '\n'
+				}
+
+				payloadArr := strings.FieldsFunc(payload,f)
 
 				for _,v1 := range payloadArr {
 					for _,v2 := range keywords {
 						if strings.Contains(v1,v2) {
-							outputToFile = v1+"\n"
+							outputToFile += v1+"\n"
 						}
 					}
 				}
 
+				/*result := func(s string) bool {
+					for _, r := range s {
+						if r < 32 || r > 126 {
+							return false
+						}
+					}
+					return true
+				}*/
+
 				if outputToFile == "" {
 					for i,v := range payloadArr {
-						if v == "\n" {
+						if v == "\x0A\x0D" {
 							break
+						} else {
+							outputToFile += payloadArr[i]
 						}
-						outputToFile += payloadArr[i]
 					}
 				}
 
