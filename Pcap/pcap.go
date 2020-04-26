@@ -103,6 +103,7 @@ func Capture (Dev string) {
 			}
 */
 			if srcPort[1] == "80(http)" || dstPort[1] == "80(http)" {
+				fmt.Println("Detected http traffic!")
 				payload := string(packet.ApplicationLayer().Payload())
 				outputToFile := ""
 
@@ -111,7 +112,8 @@ func Capture (Dev string) {
 				for _,v1 := range payloadArr {
 					for _,v2 := range keywords {
 						if strings.Contains(v1,v2) {
-							outputToFile += v1[0:len(v1)-2]+"~\n"
+							//outputToFile += v1[0:len(v1)-2]+"~\n"
+							outputToFile += v1[0:len(v1)-2]+" "
 						}
 					}
 				}
@@ -145,8 +147,10 @@ func Capture (Dev string) {
 					os.Exit(1)
 				}
 			}
+
+			fmt.Println(count)
 			count += 1
-			if count >= 4999 {
+			if count >= 1999 {
 				break
 			}
 		}
