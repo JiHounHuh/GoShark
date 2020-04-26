@@ -82,10 +82,13 @@ func Capture (Dev string) {
 
 			layers := packet.Layers()
 
-			if len(layers) < 3 {
-				fmt.Println("\nLESS THAN THREE")
+			if len(layers) < 4 {
+				//fmt.Println("\nLESS THAN FOUR")
 				continue
 			}
+
+			//fmt.Println("\n",gopacket.LayerString(layers[3]),"\n")
+			//fmt.Println("\n",string(packet.ApplicationLayer().Payload()),"\n") //prints payload as a string
 
 			layer2 := strings.Split(gopacket.LayerDump(layers[1]), " ")
 			layer3 := strings.Split(gopacket.LayerDump(layers[2]), " ")
@@ -107,7 +110,7 @@ func Capture (Dev string) {
 			srcPort := strings.Split(layer3[2],"=")
 			dstPort := strings.Split(layer3[3],"=")
 
-			fmt.Println("\nsrcIP = ",srcIP[1])
+			/*fmt.Println("\nsrcIP = ",srcIP[1])
 			fmt.Println("dstIP = ",dstIP[1])
 
 			if srcPort[0] == "SrcPort" {
@@ -116,6 +119,11 @@ func Capture (Dev string) {
 
 			if dstPort[0] == "DstPort" {
 				fmt.Println("DstPort = ",dstPort[1])
+			}*/
+
+			if dstPort[1] == "80" && srcPort[1] == "80" {
+				fmt.Println("srcIP:",srcIP[1],"\ndstIP:",dstIP[1],"\nsrcPort:",srcPort[1],"\ndstPort:",dstPort[1])
+				fmt.Println("\n",string(packet.ApplicationLayer().Payload()),"\n")
 			}
 
 
