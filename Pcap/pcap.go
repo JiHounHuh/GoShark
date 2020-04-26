@@ -138,13 +138,13 @@ func Capture (Dev string) {
 				for _,v1 := range payloadArr {
 					for _,v2 := range keywords {
 						if strings.Contains(v1,v2) {
-							outputToFile += v1[0:len(v1)-2]+"\n"
+							outputToFile += v1[0:len(v1)-2]+"~\n"
 						}
 					}
 				}
 
 				if outputToFile == "" {
-					outputToFile = "A possible vulnerability exists.\n"
+					outputToFile = "Plaintext data recoverable.~\n"
 				}
 
 				line := srcIP[1]+"~"+dstIP[1]+"~"+srcPort[1]+"~"+dstPort[1]+"~"+outputToFile+"\n"
@@ -158,7 +158,7 @@ func Capture (Dev string) {
 			if (srcPort[1] == "20(ftp)" && dstPort[1] == "20(ftp)") || (srcPort[1] == "21(ftp)" && dstPort[1] == "21(ftp)") {
 				fmt.Println("srcIP:",srcIP[1],"\ndstIP:",dstIP[1],"\nsrcPort:",srcPort[1],"\ndstPort:",dstPort[1])
 				fmt.Println("\n",string(packet.ApplicationLayer().Payload()),"\n")
-				line := srcIP[1]+"~"+dstIP[1]+"~"+srcPort[1]+"~"+dstPort[1]+"~"+string(packet.ApplicationLayer().Payload())+"\n"
+				line := srcIP[1]+"~"+dstIP[1]+"~"+srcPort[1]+"~"+dstPort[1]+"~"+string(packet.ApplicationLayer().Payload())+"~\n"
 				_, err := file.WriteString(line)
 				if err != nil {
 					fmt.Println(err)
@@ -169,7 +169,7 @@ func Capture (Dev string) {
 			if (srcPort[1] == "22(ssh)" && dstPort[1] == "22(ssh)") || (srcPort[1] == "23(telnet)" && dstPort[1] == "23(telnet)") {
 				fmt.Println("srcIP:",srcIP[1],"\ndstIP:",dstIP[1],"\nsrcPort:",srcPort[1],"\ndstPort:",dstPort[1])
 				fmt.Println("\n",string(packet.ApplicationLayer().Payload()),"\n")
-				line := srcIP[1]+"~"+dstIP[1]+"~"+srcPort[1]+"~"+dstPort[1]+"~"+string(packet.ApplicationLayer().Payload())+"\n"
+				line := srcIP[1]+"~"+dstIP[1]+"~"+srcPort[1]+"~"+dstPort[1]+"~"+string(packet.ApplicationLayer().Payload())+"~\n"
 				_, err := file.WriteString(line)
 				if err != nil {
 					fmt.Println(err)

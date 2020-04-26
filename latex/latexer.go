@@ -44,14 +44,16 @@ During our packet capture, we found the following details that might be insecure
 	}
 
 	f := func(c rune) bool {
-		return c == '~'
+		return c == '~' || c == '\n'
 	}
 
 	splits := strings.FieldsFunc(string(toRead),f)
 
 	var lineToAdd string = ""
+	rowCount := 1
 	for i, c := range splits {
-		fmt.Println("i",i)
+		fmt.Println("i",i,"|rowCount",rowCount)
+		fmt.Println(lineToAdd)
 		if len(c) == 1 {
 			if int(c[0]) < 32 {
 				continue
@@ -62,25 +64,17 @@ During our packet capture, we found the following details that might be insecure
 			lineToAdd += c
 		}
 		lineToAdd += " & "
-		fmt.Println("linesToAdd",lineToAdd)
 
-		toC := i+1
-
-		for in := 1; in < 1000; in++ {
-			if toC % (4+(5*in)) == 0 {
-				lineToAdd += "\\multicolumn{1}{m{3cm}|}{"
-			}
-		}
-
-		if toC == 4 {
+		if i % ((5*rowCount)-2) == 0 && i != 0 {
 			lineToAdd += "\\multicolumn{1}{m{3cm}|}{"
 		}
 
-		if toC % 5 == 0  {
+		if i % ((5 * rowCount) - 1) == 0 && i != 0 {
 			fmt.Println("GOT ALL 4")
-			content += lineToAdd[0:len(lineToAdd)-3] 
+			content += strings.Replace(lineToAdd[0:len(lineToAdd)-3],"_","\\_",-1) 
 			content += "}\\\\\n\\hline\n"
 			lineToAdd = ""
+			rowCount += 1
 		}
 	}
 	content = content[0:len(content)-1]
