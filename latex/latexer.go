@@ -12,16 +12,19 @@ func main() {
 	content := 
 `
 \documentclass{article}
+\usepackage{fullpage,latexsym,picinpar,amsmath,amsfonts}
 \usepackage{graphicx}
+\usepackage{tabularx}
 \begin{document}
 \begin{center}
 	\includegraphics[scale=0.25]{Cyber_525x438.png}\\
 \end{center}	
 \centerline{\large \bf REPORT}
 \begin{center}
- \begin{tabular}{||c c c c||} 
+During our packet capture, we found the following details that might be insecure\\
+ \begin{tabular}{||c c c c c||} 
  \hline 
- SrcIP & DstIP & SrcPort & DstPort \\ [0.5ex]
+ SrcIP & DstIP & SrcPort & DstPort & Finding \\ [0.5ex] 
  \hline\hline
 `
 	end :=
@@ -30,11 +33,7 @@ func main() {
 \end{center}
 \end{document}
 `
-
 /*
-
-
-
 \begin{center}
  \begin{tabular}{||c c c c||} 
  \hline
@@ -73,19 +72,20 @@ func main() {
 
 		toC := i+1
 
-		if toC % 4 == 0  {
+		if toC % 5 == 0  {
 			fmt.Println("GOT ALL 4")
-			content += lineToAdd[0:len(lineToAdd)-2] 
+			content += lineToAdd[0:len(lineToAdd)-3] 
 			content += " \\\\\n\\hline\n"
 			lineToAdd = ""
 		}
 	}
+	content = content[0:len(content)-1]
 
 
 	content += end
 
 	fmt.Println("To write:\n",content)
-	writeErr := ioutil.WriteFile("test.tex", []byte(content), 0644)
+	writeErr := ioutil.WriteFile("report.tex", []byte(content), 0644)
 
 	if writeErr != nil {
 		fmt.Println("Error writing file")
