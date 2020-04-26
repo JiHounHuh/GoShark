@@ -29,7 +29,6 @@ func Capture (Dev string) {
 				os.Exit(1)
 			}
 			count += 1
-			//w.WritePacket(packet.Metadata().CaptureInfo, packet.Data())
 		}
 	}
 	// Start capturing network traffic
