@@ -70,7 +70,6 @@ func listInterfaces() []string {
 
 	 iface = listInterfaces()
 	 input := readUserInput(len(iface))
-	 fmt.Println(input)
 	 L.Capture(iface[input])
 	 // list off interfaces
 	 // have user choose 1 AND/OR 2,....
