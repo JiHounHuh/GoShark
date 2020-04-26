@@ -2,7 +2,8 @@
 A wireshark CLI written in go!
 
 CURRENTLY MUST BE RUN AS ROOT
-this is because libpcap is protected at the kernel level and to avoid permissions mishaps, you msut be root to capture packets
+
+this is because libpcap is protected at the kernel level and to avoid permissions mishaps, you must be root to capture packets
 
 Basic Premise
 - CLI
