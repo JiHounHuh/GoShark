@@ -30,12 +30,10 @@ func listInterfaces() []string {
 	for index, iface := range ifaceArr {
 		fmt.Println(index, ": ", iface)
 	}
-
 	return ifaceArr
 }
 
 func readUserInput(size int) int {
-	//size := len(net.Interfaces())
 	reader := bufio.NewReader(os.Stdin)
 	count := 0
 
