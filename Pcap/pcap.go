@@ -40,26 +40,6 @@ func Capture (Dev string) {
 				fmt.Println("Capture begins.")
 				flag = 1
 			}
-			// Process packets here
-			//end := time.Now()
-			//elapsed := end.Sub(start)
-
-			// time in nanoseconds
-			/*if elapsed >= 30000000000 {
-				count += 1
-				file.Close()
-				filename = "packets"+strconv.Itoa(count)+".pcap"
-				file, err = os.OpenFile(filename, os.O_CREATE | os.O_APPEND | os.O_WRONLY, 0660)
-
-				if err != nil{
-					fmt.Println(err)
-					os.Exit(1)
-				}
-				fmt.Println("created new pcap file:",filename)
-				start = time.Now()
-				elapsed = 0
-			}*/
-			//fmt.Println(packet.Dump())
 
 			layers := packet.Layers()
 
@@ -67,9 +47,6 @@ func Capture (Dev string) {
 				//fmt.Println("\nLESS THAN FOUR")
 				continue
 			}
-
-			//fmt.Println("\n",gopacket.LayerString(layers[3]),"\n")
-			//fmt.Println("\n",string(packet.ApplicationLayer().Payload()),"\n") //prints payload as a string
 
 			layer2 := strings.Split(gopacket.LayerDump(layers[1]), " ")
 			layer3 := strings.Split(gopacket.LayerDump(layers[2]), " ")
@@ -90,18 +67,6 @@ func Capture (Dev string) {
 			dstIP := strings.Split(layer2[13],"=")
 			srcPort := strings.Split(layer3[2],"=")
 			dstPort := strings.Split(layer3[3],"=")
-/*
-			fmt.Println("\nsrcIP = ",srcIP[1])
-			fmt.Println("dstIP = ",dstIP[1])
-
-			if srcPort[0] == "SrcPort" {
-				fmt.Println("SrcPort = ",srcPort[1])
-			}
-
-			if dstPort[0] == "DstPort" {
-				fmt.Println("DstPort = ",dstPort[1])
-			}
-*/
 			if srcPort[1] == "80(http)" || dstPort[1] == "80(http)" {
 				fmt.Println("Detected http traffic!")
 				payload := string(packet.ApplicationLayer().Payload())
