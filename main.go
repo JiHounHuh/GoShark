@@ -32,7 +32,6 @@ func listInterfaces() []string {
 	for index, iface := range ifaceArr {
 		fmt.Println(index, ": ", iface)
 	}
-
 	return ifaceArr
 }
 
@@ -74,5 +73,6 @@ func main() {
 	//input := readUserInput(len(iface))
 	//p.Capture(iface[input])
 	l.MakeReport("toRead.txt")
+
 	os.Exit(0)
 }
