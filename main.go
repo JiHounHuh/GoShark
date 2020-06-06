@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"strings"
 
-	l "./latex"
-	//p "./pcap"
+	//l "./latex"
+	p "./pcap"
 )
 
 func listInterfaces() []string {
@@ -69,10 +69,10 @@ func main() {
 	fmt.Println(shark, "\n|:|:|:|:|:| GoShark |:|:|:|:|:|")
 	fmt.Println("Available connected interfaces")
 
-	//iface := listInterfaces()
-	//input := readUserInput(len(iface))
-	//p.Capture(iface[input])
-	l.MakeReport("toRead.txt")
+	iface := listInterfaces()
+	input := readUserInput(len(iface))
+	p.Capture(iface[input])
+	//l.MakeReport("toRead.txt")
 
 	os.Exit(0)
 }
