@@ -8,7 +8,8 @@ import (
 	"strconv"
 	"strings"
 
-	p "./pcap"
+	l "./latex"
+	//p "./pcap"
 )
 
 func listInterfaces() []string {
@@ -36,7 +37,6 @@ func listInterfaces() []string {
 }
 
 func readUserInput(size int) int {
-	//size := len(net.Interfaces())
 	reader := bufio.NewReader(os.Stdin)
 	count := 0
 
@@ -67,12 +67,12 @@ func readUserInput(size int) int {
 func main() {
 	// http://www.ascii-art.de/ascii/s/sharks.txt
 	shark := "                     ^`.                     o\n     ^_              \\  \\                  o  o\n     \\ \\             {   \\                 o\n     {  \\           /     `~~~--__\n     {   \\___----~~'              `~~-_     ______          _____\n      \\                         /// a  `~._(_||___)________/___\n      / /~~~~-, ,__.    ,      ///  __,,,,)      o  ______/    \\ \n      \\/      \\/    `~~~;   ,---~~-_`~= \\ \\------o-'            \\ \n                       /   /            / /\n                      '._.'           _/_/\n                                      ';|\\ \n            -David 'TAZ' Baltazar-	 \n"
-	var iface []string
 	fmt.Println(shark, "\n|:|:|:|:|:| GoShark |:|:|:|:|:|")
 	fmt.Println("Available connected interfaces")
 
-	iface = listInterfaces()
-	input := readUserInput(len(iface))
-	p.Capture(iface[input])
+	//iface := listInterfaces()
+	//input := readUserInput(len(iface))
+	//p.Capture(iface[input])
+	l.MakeReport("toRead.txt")
 	os.Exit(0)
 }

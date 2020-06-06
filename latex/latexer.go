@@ -2,7 +2,6 @@ package latex
 
 import (
 	"fmt"
-	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -10,11 +9,13 @@ import (
 	"text/template"
 )
 
-var templates = template.ParseFiles("./reportTemplate.tex")
+var templates, parseErr = template.ParseFiles("./reportTemplate.tex")
 
-func CompileReport(filename string, iow *io.Writer) error {
-
-	writeErr := ioutil.WriteFile(filename, 0644)
+func CompileReport(filename string) error {
+	if parseErr != nil {
+		fmt.Println("Cannot parse ./reportTemplate.tex, please check if it exists and you have suffienct permissions to access it.")
+		return parseErr
+	}
 
 	cmd := exec.Command("/usr/bin/pdflatex", filename)
 	cmdErr := cmd.Run()
@@ -28,11 +29,12 @@ func CompileReport(filename string, iow *io.Writer) error {
 }
 
 func MakeReport(filename string) error {
+	outputName := "report"
 	toReadBytes, readErr := ioutil.ReadFile(filename)
 
 	if readErr != nil {
 		fmt.Println("Error reading insecure packets from file", readErr)
-		return iow, readErr
+		return readErr
 	}
 
 	f := func(c rune) bool { return c == '~' || c == '\n' }
@@ -65,7 +67,12 @@ func MakeReport(filename string) error {
 			rowCount += 1
 		}
 	}
-	content = content[0 : len(content)-1]
+
+	if len(content) != 0 {
+		content = content[0 : len(content)-1]
+	} else {
+		content = string(toReadBytes)
+	}
 
 	reportTex, creatErr := os.Create(filename + ".tex")
 	if creatErr != nil {
@@ -74,7 +81,7 @@ func MakeReport(filename string) error {
 	}
 
 	// write our report.tex to the writer
-	writeErr := templates.Execute(reportTex, filename, content)
+	writeErr := templates.ExecuteTemplate(reportTex, outputName, content)
 
 	if writeErr != nil {
 		fmt.Println("Error writing file")
@@ -82,6 +89,12 @@ func MakeReport(filename string) error {
 	}
 
 	reportTex.Close()
+	compErr := CompileReport(outputName)
+
+	if compErr != nil {
+		fmt.Println("Error with CompileReport()")
+		return compErr
+	}
 
 	return nil
 }
