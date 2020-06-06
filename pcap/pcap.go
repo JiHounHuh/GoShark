@@ -1,7 +1,7 @@
 package Pcap
 
 import (
-	A "../Latex"
+	latexer "../latex"
 	"fmt"
 	"strings"
 	"os"
@@ -31,7 +31,7 @@ func Capture (Dev string) {
 		fmt.Println(filename,"created.")
 
 		defer file.Close()
-		defer A.MakeReport()
+		defer latexer.MakeReport()
 
 		//start := time.Now()
 		//fmt.Println("start time",start)
@@ -155,6 +155,6 @@ func Capture (Dev string) {
 			}
 		}
 	}
-	A.MakeReport()
+	latexer.MakeReport()
 	return
 }

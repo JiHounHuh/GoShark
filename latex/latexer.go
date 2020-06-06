@@ -1,57 +1,45 @@
-package Latex
+package latex
 
 import (
 	"fmt"
+	"io"
+	"io/ioutil"
 	"os"
 	"os/exec"
-	"io/ioutil"
 	"strings"
+	"text/template"
 )
-//\usepackage{fullpage,latexsym,picinpar,amsmath,amsfonts}
-func MakeReport() {
-	content :=
-`
-\documentclass{article}
-\usepackage{fullpage,latexsym,picinpar,amsmath,amsfonts}
-\usepackage{graphicx}
-\usepackage{array}
-\usepackage{longtable}
-\newcolumntype{L}{>{\centering\arraybackslash}m{3cm}}
-\usepackage{tabularx}
-\begin{document}
-\begin{center}
-	\includegraphics[scale=0.25]{Cyber_525x438.png}\\
-\end{center}
-\centerline{\large \bf REPORT}
-\begin{center}
-During our packet capture, we found the following details that might be insecure\\
-\newpage
- \begin{longtable}{||c c c c c||}
- \hline
- SrcIP & DstIP & SrcPort & DstPort & Finding \\ [0.5ex]
- \hline\hline
-`
-	end :=
-`
-\end{longtable}
-\end{center}
-\end{document}
-`
-	// for loop to search file to add to latex
-	toRead, readErr := ioutil.ReadFile("toRead.txt")
+
+var templates = template.ParseFiles("./reportTemplate.tex")
+
+func CompileReport(filename string, iow *io.Writer) error {
+
+	writeErr := ioutil.WriteFile(filename, 0644)
+
+	cmd := exec.Command("/usr/bin/pdflatex", filename)
+	cmdErr := cmd.Run()
+
+	if cmdErr != nil {
+		fmt.Println("Error running pdflatex on report.tex", cmdErr)
+		return cmdErr
+	}
+
+	return nil
+}
+
+func MakeReport(filename string) error {
+	toReadBytes, readErr := ioutil.ReadFile(filename)
 
 	if readErr != nil {
 		fmt.Println("Error reading insecure packets from file", readErr)
-		os.Exit(1)
+		return iow, readErr
 	}
 
-	f := func(c rune) bool {
-		return c == '~' || c == '\n'
-	}
-
-	splits := strings.FieldsFunc(string(toRead),f)
+	f := func(c rune) bool { return c == '~' || c == '\n' }
+	splits := strings.FieldsFunc(string(toReadBytes), f)
 
 	var lineToAdd string = ""
+	var content string = ""
 	rowCount := 1
 	for i, c := range splits {
 		if len(c) == 1 {
@@ -65,33 +53,35 @@ During our packet capture, we found the following details that might be insecure
 		}
 		lineToAdd += " & "
 
-		if i % ((5*rowCount)-2) == 0 && i != 0 {
+		if i%((5*rowCount)-2) == 0 && i != 0 {
 			lineToAdd += "\\multicolumn{1}{m{8.5cm}|}{"
 		}
 
-		if i % ((5 * rowCount) - 1) == 0 && i != 0 {
-			content += strings.Replace(lineToAdd[0:len(lineToAdd)-3],"_","\\_",-1)
+		if i%((5*rowCount)-1) == 0 && i != 0 {
+			// we need to escape underscores in the latex
+			content += strings.Replace(lineToAdd[0:len(lineToAdd)-3], "_", "\\_", -1)
 			content += "}\\\\\n\\hline\n"
 			lineToAdd = ""
 			rowCount += 1
 		}
 	}
-	content = content[0:len(content)-1]
+	content = content[0 : len(content)-1]
 
-	content += end
+	reportTex, creatErr := os.Create(filename + ".tex")
+	if creatErr != nil {
+		fmt.Println("Error creating .tex file")
+		return creatErr
+	}
 
-	writeErr := ioutil.WriteFile("report.tex", []byte(content), 0644)
+	// write our report.tex to the writer
+	writeErr := templates.Execute(reportTex, filename, content)
 
 	if writeErr != nil {
 		fmt.Println("Error writing file")
-		os.Exit(1)
+		return writeErr
 	}
 
-	cmd := exec.Command("/usr/bin/pdflatex","report.tex")
-	cmdErr := cmd.Run()
+	reportTex.Close()
 
-	if cmdErr != nil {
-		fmt.Println("Error running pdflatex on report.tex",cmdErr)
-		os.Exit(1)
-	}
+	return nil
 }
