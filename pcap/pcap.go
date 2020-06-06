@@ -10,7 +10,8 @@ import (
 	"github.com/google/gopacket/pcap"
 )
 
-func Capture(Dev string) {
+func Capture(Dev string) error {
+	filename := "toRead.txt"
 	flag := 0
 	count := 0
 	keywords := []string{"admin", "Admin", "Set-Cookie", "cookie", "Cookie", "user", "User", "Pass", "pass", "password", "passwd", "Password", "Passwd", "key", "Key", "username", "Username"}
@@ -21,7 +22,6 @@ func Capture(Dev string) {
 		packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
 		//count := 0
 
-		filename := "toRead.txt"
 		//filename := "packets"+strconv.Itoa(count)+".pcap"
 		file, err := os.OpenFile(filename, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0660)
 
@@ -152,10 +152,17 @@ func Capture(Dev string) {
 			fmt.Println(count)
 			count += 1
 			if count >= 1999 {
-				break
+				goto A
 			}
 		}
 	}
-	latexer.MakeReport()
-	return
+
+A:
+	makeErr := latexer.MakeReport(filename)
+
+	if makeErr != nil {
+		fmt.Println("Error making report:\n %s", makeErr)
+		return makeErr
+	}
+	return nil
 }

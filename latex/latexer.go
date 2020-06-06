@@ -29,7 +29,7 @@ func CompileReport(filename string) error {
 }
 
 func MakeReport(filename string) error {
-	outputName := "report"
+	outputName := "report.tex"
 	toReadBytes, readErr := ioutil.ReadFile(filename)
 
 	if readErr != nil {
@@ -74,17 +74,19 @@ func MakeReport(filename string) error {
 		content = string(toReadBytes)
 	}
 
-	reportTex, creatErr := os.Create(filename + ".tex")
+	reportTex, creatErr := os.Create(outputName)
 	if creatErr != nil {
 		fmt.Println("Error creating .tex file")
 		return creatErr
 	}
 
 	// write our report.tex to the writer
-	writeErr := templates.ExecuteTemplate(reportTex, outputName, content)
+	writeErr := templates.Execute(reportTex, content)
+
+	fmt.Println(outputName, content, filename)
 
 	if writeErr != nil {
-		fmt.Println("Error writing file")
+		fmt.Println("Error writing file, %s", writeErr)
 		return writeErr
 	}
 
